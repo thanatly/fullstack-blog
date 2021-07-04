@@ -16,4 +16,3 @@ transform: (document, returnedObject) => {
 })
 
 module.exports = mongoose.model('Blog', blogSchema)
-
