@@ -84,7 +84,22 @@ test('a valid blog can be added', async () => {
   )
 })
 
-afterAll(() => {
-  mongoose.connection.close()
-})
+test('blog without title and url is not added', async () => {
+  const incompleteBlog = 
+    {
+      author: "Edsger W. Dijkstra",
+      likes: 12,
+      id: "5a422b3a1b54a676234d17ff"
+    }
+  await api
+  .post('/api/blogs')
+  .send(incompleteBlog)
+  .expect(400)
 
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(initialBlogs.length)
+}, 100000)
+
+afterAll( async () => {
+  await mongoose.connection.close()
+})
