@@ -84,6 +84,24 @@ test('a valid blog can be added', async () => {
   )
 })
 
+test('if like missing, default to 0', async () => {
+  const nolikeBlog = 
+    {
+      title: "No like",
+      author: "Michael Chan",
+      url: "https://reactpatterns.com/",
+      id: "5a422a851b54a676234d17f0"
+    }
+  await api
+  .post('/api/blogs')
+  .send(nolikeBlog)
+  .expect(200)
+
+  const response = await api.get('/api/blogs')
+  const addedNote = response.body
+  expect(addedNote[addedNote.length-1].likes).toEqual(0)
+}, 100000)
+
 test('blog without title and url is not added', async () => {
   const incompleteBlog = 
     {
