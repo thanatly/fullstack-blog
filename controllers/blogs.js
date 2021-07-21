@@ -42,11 +42,11 @@ blogsRouter.put('/:id', async (request, response, next) => {
     url: body.url,
     likes: body.likes
   }
-  //make this promise chaining into async/wait
-  Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
-  .then(updatedBlog => {
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  if (updatedBlog) {
     response.json(updatedBlog)
-  })
-  .catch(error => next(error))
+  } else {
+    response.status(404).end()
+  }
 })
 module.exports = blogsRouter
