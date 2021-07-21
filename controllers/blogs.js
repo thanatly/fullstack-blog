@@ -1,13 +1,25 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 
-//make all router in async/ wait syntax  
 blogsRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({})
     response.json(blogs.map(blog => blog.toJSON()))
   })
   
-// 4.13 delete
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    response.json(blog)
+  } else {
+    response.status(404).end()
+  }
+})
+
+blogsRouter.delete('/:id', async (request, response) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
+})
+
 // 4.14 update blog
 blogsRouter.post('/', async (request, response, next) => {
     const body = request.body
@@ -18,12 +30,9 @@ blogsRouter.post('/', async (request, response, next) => {
       likes: body.likes
     })
 
-    try { 
-      const savedBlog = await blog.save()
-      response.json(savedBlog.toJSON())
-    } catch(exception) {
-      next(exception)
-    }
+    const savedBlog = await blog.save()
+    response.json(savedBlog.toJSON())
+
   })
 
 module.exports = blogsRouter
