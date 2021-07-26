@@ -34,8 +34,3 @@ app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 module.exports = app
-
-// Next steps
-/// Users should be stored in the database
-/// every note should be linked to the user who created it. 
-/// Deleting and editing a note should only be allowed for the user who created it.

@@ -25,9 +25,7 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-// Delete only when authorized
 blogsRouter.delete('/:id', async (request, response) => {
-  // Authentication
   const body = request.body
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!request.token || !decodedToken.id) {
