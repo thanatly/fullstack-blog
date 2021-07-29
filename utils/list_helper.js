@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 function amount(item){
 return item.likes;
 }
@@ -32,9 +34,29 @@ const mostLikes = (blogs) => blogs
   }, {sums: {}, most: {likes:0} })
   .most;
 
+const mostBlogs = (blogs) => { 
+const authorMostBlogs =
+  _.chain(blogs)
+  .map('author')
+  .flatten()
+  .countBy()
+  .entries()
+  .maxBy(_.last)
+  .value()
+
+const desiredFormat = {
+  "author": authorMostBlogs[0],
+  "blogs": authorMostBlogs[1]
+}
+
+return desiredFormat
+
+}
+
 module.exports = {
   totalLikes,
   favoriteBlog,
-  mostLikes
+  mostLikes,
+  mostBlogs
 }
 
